@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f7fb">
+    <title>Acesso | Ponto de Fornecimento</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="auth-page">
+    <main class="auth-layout">
+        <section class="auth-story">
+            <a class="brand auth-brand" href="/">
+                <span class="brand-mark">PF</span>
+                <span class="brand-copy"><strong>Ponto de</strong><span>Fornecimento</span></span>
+            </a>
+            <div class="auth-story-content">
+                <span class="story-kicker"><span class="story-dot"></span> FORNECIMENTO B2B</span>
+                <h1>Uma operação mais simples começa aqui.</h1>
+                <p>Encontre produtos para o seu negócio, faça pedidos e acompanhe tudo em um só lugar.</p>
+                <div class="story-points">
+                    <div><span class="story-check">✓</span><span>Catálogo de atacado sempre à mão</span></div>
+                    <div><span class="story-check">✓</span><span>Pedidos e histórico organizados</span></div>
+                    <div><span class="story-check">✓</span><span>Um espaço feito para o seu negócio</span></div>
+                </div>
+            </div>
+            <span class="auth-copyright">© <span id="current-year"></span> Ponto de Fornecimento</span>
+        </section>
+
+        <section class="auth-main">
+            <div class="auth-card">
+                <div class="auth-mobile-brand">
+                    <span class="brand-mark">PF</span>
+                    <strong>Ponto de Fornecimento</strong>
+                </div>
+                <p class="eyebrow">PORTAL DO FORNECEDOR</p>
+                <h2 id="auth-title">Boas-vindas de volta</h2>
+                <p class="auth-subtitle" id="auth-subtitle">Acesse sua conta para continuar.</p>
+
+                <div class="auth-tabs" role="tablist" aria-label="Acesso à conta">
+                    <button class="auth-tab active" type="button" role="tab" aria-selected="true" data-auth-tab="login">Entrar</button>
+                    <button class="auth-tab" type="button" role="tab" aria-selected="false" data-auth-tab="register">Criar conta</button>
+                </div>
+
+                <form id="login-form" class="auth-form">
+                    <label for="login-email">E-mail</label>
+                    <input id="login-email" name="email" type="email" autocomplete="username" placeholder="voce@empresa.com" required>
+                    <label for="login-password">Senha</label>
+                    <input id="login-password" name="senha" type="password" autocomplete="current-password" placeholder="Sua senha" required>
+                    <button class="button button-primary auth-submit" type="submit">Entrar na minha conta <span>→</span></button>
+                    <p class="auth-feedback" id="login-feedback" role="status" aria-live="polite"></p>
+                </form>
+
+                <form id="register-form" class="auth-form" hidden>
+                    <label for="register-company">Nome da empresa</label>
+                    <input id="register-company" name="nome_empresa" type="text" maxlength="150" autocomplete="organization" placeholder="Ex.: Mercado Central" required>
+                    <label for="register-cnpj">CNPJ</label>
+                    <input id="register-cnpj" name="cnpj" type="text" maxlength="20" placeholder="00.000.000/0000-00" required>
+                    <label for="register-email">E-mail</label>
+                    <input id="register-email" name="email" type="email" maxlength="100" autocomplete="email" placeholder="voce@empresa.com" required>
+                    <label for="register-password">Senha <span class="label-hint">mínimo de 8 caracteres</span></label>
+                    <input id="register-password" name="senha" type="password" minlength="8" maxlength="255" autocomplete="new-password" placeholder="Crie uma senha segura" required>
+                    <button class="button button-primary auth-submit" type="submit">Criar conta de lojista <span>→</span></button>
+                    <p class="auth-feedback" id="register-feedback" role="status" aria-live="polite"></p>
+                </form>
+
+                <div class="auth-secure-note"><span>▣</span> Suas informações são transmitidas com segurança.</div>
+            </div>
+        </section>
+    </main>
+    <script src="../js/login.js" defer></script>
+</body>
+</html>

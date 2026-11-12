@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f7fb">
+    <title>Área do lojista | Ponto de Fornecimento</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="portal-page client-portal">
+    <header class="portal-header">
+        <a class="brand portal-brand" href="/pages/client.html">
+            <span class="brand-mark">PF</span>
+            <span class="brand-copy"><strong>Ponto de</strong><span>Fornecimento</span></span>
+        </a>
+        <nav class="portal-nav" aria-label="Navegação do cliente">
+            <a class="portal-nav-link active" href="#catalog">Catálogo</a>
+            <a class="portal-nav-link" href="#orders">Meus pedidos</a>
+        </nav>
+        <div class="portal-account">
+            <span class="account-name" id="account-name">Carregando...</span>
+            <button type="button" class="button button-secondary logout-button" data-logout>Sair</button>
+        </div>
+    </header>
+
+    <main class="portal-main">
+        <section class="portal-welcome">
+            <div>
+                <p class="eyebrow">ÁREA DO LOJISTA</p>
+                <h1>Olá, <span id="welcome-name">lojista</span>.</h1>
+                <p>Escolha os produtos para o seu negócio e acompanhe seus pedidos.</p>
+            </div>
+            <a class="button button-primary welcome-cart-link" href="#cart">Ver carrinho <span id="cart-count" class="cart-count">0</span></a>
+        </section>
+
+        <section class="portal-section" id="catalog">
+            <div class="portal-section-heading">
+                <div><p class="eyebrow">SELEÇÃO PARA O SEU NEGÓCIO</p><h2>Catálogo de produtos</h2></div>
+                <label class="search-box"><span>⌕</span><input id="client-product-search" type="search" placeholder="Buscar produto..." aria-label="Buscar produto"></label>
+            </div>
+            <div class="client-product-grid" id="client-products"></div>
+            <p class="empty-state card" id="client-products-empty" hidden>Nenhum produto disponível no momento.</p>
+            <p class="portal-feedback" id="catalog-feedback" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="portal-section client-lower-grid">
+            <article class="card portal-card" id="cart">
+                <div class="portal-section-heading compact">
+                    <div><p class="eyebrow">SEU PEDIDO</p><h2>Carrinho</h2></div>
+                    <span class="count-pill" id="cart-items-count">0 itens</span>
+                </div>
+                <div class="cart-items" id="cart-items"></div>
+                <p class="empty-state" id="cart-empty">Seu carrinho está vazio. Adicione produtos do catálogo.</p>
+                <div class="cart-summary">
+                    <span>Total estimado</span><strong id="cart-total">R$ 0,00</strong>
+                </div>
+                <button class="button button-primary checkout-button" id="checkout-button" type="button" disabled>Finalizar pedido <span>→</span></button>
+                <p class="portal-feedback" id="checkout-feedback" role="status" aria-live="polite"></p>
+            </article>
+
+            <article class="card portal-card" id="orders">
+                <div class="portal-section-heading compact">
+                    <div><p class="eyebrow">ACOMPANHAMENTO</p><h2>Meus pedidos</h2></div>
+                    <button class="button button-secondary" type="button" id="refresh-orders">↻ Atualizar</button>
+                </div>
+                <div class="orders-list" id="client-orders"></div>
+                <p class="empty-state" id="client-orders-empty" hidden>Você ainda não fez pedidos.</p>
+                <p class="portal-feedback" id="orders-feedback" role="status" aria-live="polite"></p>
+            </article>
+        </section>
+        <footer class="portal-footer">Ponto de Fornecimento <span>·</span> Atendimento ao lojista</footer>
+    </main>
+    <script src="../js/client.js" defer></script>
+</body>
+</html>
