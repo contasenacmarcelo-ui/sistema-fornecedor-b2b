@@ -3,7 +3,7 @@ import { hashPassword } from "../auth/passwords.js"
 
 async function buscarUsers(req, res) {
     try {
-        const [rows] = await pool.execute("SELECT id, nome_empresa, cnpj, email, role, created_at FROM users")
+        const { rows } = await pool.query("SELECT id, nome_empresa, cnpj, email, role, created_at FROM users")
 
         res.json([rows])
     } catch (error) {
@@ -29,14 +29,14 @@ async function inserirUsers(req, res) {
         }
 
         const passwordHash = await hashPassword(senha)
-        await pool.execute(
-            "INSERT INTO users (nome_empresa, cnpj, email, senha, role) VALUES (?, ?, ?, ?, 'client')",
+        await pool.query(
+            "INSERT INTO users (nome_empresa, cnpj, email, senha, role) VALUES ($1, $2, $3, $4, 'client') RETURNING id",
             [nome_empresa, cnpj, email, passwordHash]
         )
 
         res.status(201).json({ sucesso: "Usuário cadastrado. Faça login para continuar." })
     } catch (error) {
-        if (error.code === "ER_DUP_ENTRY") {
+        if (error.code === "23505") {
             return res.status(409).json({ erro: "Já existe um cadastro com esse CNPJ ou e-mail." })
         }
         res.status(500).json({ erro: "Erro ao cadastrar usuário." })
@@ -62,13 +62,13 @@ async function alterarUsuario(req,res) {
 
         if (senha) {
             const passwordHash = await hashPassword(senha)
-            await pool.execute(
-                "UPDATE users SET nome_empresa = ?, cnpj = ?, email = ?, senha = ? WHERE id = ?",
+            await pool.query(
+                "UPDATE users SET nome_empresa = $1, cnpj = $2, email = $3, senha = $4 WHERE id = $5",
                 [nome_empresa, cnpj, email, passwordHash, id]
             )
         } else {
-            await pool.execute(
-                "UPDATE users SET nome_empresa = ?, cnpj = ?, email = ? WHERE id = ?",
+            await pool.query(
+                "UPDATE users SET nome_empresa = $1, cnpj = $2, email = $3 WHERE id = $4",
                 [nome_empresa, cnpj, email, id]
             )
         }
@@ -82,7 +82,7 @@ async function alterarUsuario(req,res) {
 async function deletarUsers(req, res) {
     try {
         const { id } = req.params
-        await pool.execute("DELETE FROM users WHERE id = ?", [id])
+        await pool.query("DELETE FROM users WHERE id = $1", [id])
         res.json({ sucesso: "O usuário foi removido com sucesso." })
     } catch (error) {
         res.status(500).json({ erro: "Erro ao remover usuário." })

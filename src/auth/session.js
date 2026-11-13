@@ -68,8 +68,8 @@ async function requireAuth(req, res, next) {
         const session = readSessionToken(readCookie(req, COOKIE_NAME))
         if (!session) return res.status(401).json({ erro: "Autenticação necessária." })
 
-        const [rows] = await pool.execute(
-            "SELECT id, nome_empresa, email, role FROM users WHERE id = ? LIMIT 1",
+        const { rows } = await pool.query(
+            "SELECT id, nome_empresa, email, role FROM users WHERE id = $1 LIMIT 1",
             [session.sub]
         )
         if (!rows.length) return res.status(401).json({ erro: "Sessão inválida." })

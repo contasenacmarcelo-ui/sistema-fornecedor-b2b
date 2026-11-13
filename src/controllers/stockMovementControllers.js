@@ -2,7 +2,7 @@ import pool from "../config/fornecedor_db.js"
 
 async function buscarStockMovements(req, res) {
     try {
-        const [rows] = await pool.execute("SELECT * FROM stock_movements ORDER BY created_at DESC")
+        const { rows } = await pool.query("SELECT * FROM stock_movements ORDER BY created_at DESC")
         res.json([rows])
     } catch (error) {
         res.status(500).json({ erro: "Erro ao buscar movimentações de estoque." })
@@ -26,15 +26,15 @@ async function inserirStockMovement(req, res) {
         return res.status(400).json({ erro: "Produto, tipo e quantidade informados são inválidos." })
     }
 
-    const connection = await pool.getConnection()
+    const connection = await pool.connect()
     try {
-        await connection.beginTransaction()
-        const [products] = await connection.execute(
-            "SELECT id, estoque FROM products WHERE id = ? FOR UPDATE",
+        await connection.query("BEGIN")
+        const { rows: products } = await connection.query(
+            "SELECT id, estoque FROM products WHERE id = $1 FOR UPDATE",
             [productId]
         )
         if (!products.length) {
-            await connection.rollback()
+            await connection.query("ROLLBACK")
             return res.status(404).json({ erro: "Produto não encontrado." })
         }
 
@@ -46,20 +46,20 @@ async function inserirStockMovement(req, res) {
                 : quantity
 
         if (nextStock < 0 || nextStock > 2147483647) {
-            await connection.rollback()
+            await connection.query("ROLLBACK")
             return res.status(400).json({ erro: "A movimentação deixaria o estoque fora do limite permitido." })
         }
 
-        await connection.execute("UPDATE products SET estoque = ? WHERE id = ?", [nextStock, productId])
-        await connection.execute(
-            "INSERT INTO stock_movements (product_id, tipo, quantidade, motivo) VALUES (?, ?, ?, ?)",
+        await connection.query("UPDATE products SET estoque = $1 WHERE id = $2", [nextStock, productId])
+        await connection.query(
+            "INSERT INTO stock_movements (product_id, tipo, quantidade, motivo) VALUES ($1, $2, $3, $4) RETURNING id",
             [productId, tipo, quantity, motivo]
         )
 
-        await connection.commit()
+        await connection.query("COMMIT")
         res.status(201).json({ sucesso: "Movimentação registrada e estoque atualizado." })
     } catch (error) {
-        await connection.rollback()
+        await connection.query("ROLLBACK")
         res.status(500).json({ erro: "Erro ao registrar movimentação de estoque." })
     } finally {
         connection.release()

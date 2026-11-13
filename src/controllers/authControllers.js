@@ -45,8 +45,8 @@ async function login(req, res) {
             return res.status(429).json({ erro: "Muitas tentativas. Aguarde 15 minutos e tente novamente." })
         }
 
-        const [rows] = await pool.execute(
-            "SELECT id, nome_empresa, email, senha, role FROM users WHERE email = ? LIMIT 1",
+        const { rows } = await pool.query(
+            "SELECT id, nome_empresa, email, senha, role FROM users WHERE email = $1 LIMIT 1",
             [email]
         )
         const user = rows[0]
@@ -60,7 +60,7 @@ async function login(req, res) {
         failedLogins.delete(clientIp)
         if (verification.needsRehash) {
             const passwordHash = await hashPassword(senha)
-            await pool.execute("UPDATE users SET senha = ? WHERE id = ?", [passwordHash, user.id])
+            await pool.query("UPDATE users SET senha = $1 WHERE id = $2", [passwordHash, user.id])
         }
 
         setSessionCookie(res, user.id)

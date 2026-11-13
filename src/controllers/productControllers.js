@@ -27,7 +27,7 @@ function readProductFields(body = {}) {
 
 async function buscarProducts(req, res) {
     try {
-        const [rows] = await pool.execute("SELECT * FROM products")
+        const { rows } = await pool.query("SELECT * FROM products")
 
         res.json([rows])
     } catch (error) {
@@ -41,8 +41,8 @@ async function inserirProduct(req, res) {
         if (!fields) return res.status(400).json({ erro: "Os dados do produto são inválidos." })
         const { nome, descricao, preco_atacado, estoque, min_pedido, imagem } = fields
 
-        await pool.execute(
-            "INSERT INTO products (nome, descricao, preco_atacado, estoque, min_pedido, imagem) VALUES (?, ?, ?, ?, ?, ?)",
+        await pool.query(
+            "INSERT INTO products (nome, descricao, preco_atacado, estoque, min_pedido, imagem) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
             [nome, descricao, preco_atacado, estoque, min_pedido, imagem]
         )
 
@@ -59,8 +59,8 @@ async function alterarProduct(req, res) {
         if (!fields) return res.status(400).json({ erro: "Os dados do produto são inválidos." })
         const { nome, descricao, preco_atacado, estoque, min_pedido, imagem } = fields
 
-        await pool.execute(
-            "UPDATE products SET nome = ?, descricao = ?, preco_atacado = ?, estoque = ?, min_pedido = ?, imagem = ? WHERE id = ?",
+        await pool.query(
+            "UPDATE products SET nome = $1, descricao = $2, preco_atacado = $3, estoque = $4, min_pedido = $5, imagem = $6 WHERE id = $7",
             [nome, descricao, preco_atacado, estoque, min_pedido, imagem, id]
         )
 
@@ -74,7 +74,7 @@ async function deletarProduct(req, res) {
     try {
         const { id } = req.params
 
-        await pool.execute("DELETE FROM products WHERE id = ?", [id])
+        await pool.query("DELETE FROM products WHERE id = $1", [id])
 
         res.json({ sucesso: "O produto foi deletado com sucesso!" })
     } catch (error) {
