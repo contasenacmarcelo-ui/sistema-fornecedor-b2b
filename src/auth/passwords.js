@@ -12,6 +12,7 @@ async function hashPassword(password) {
 
 async function verifyPassword(password, storedPassword) {
     if (!storedPassword?.startsWith("scrypt$")) {
+        await scrypt(password, randomBytes(16), KEY_LENGTH)
         return {
             valid: typeof storedPassword === "string" && password === storedPassword,
             needsRehash: true

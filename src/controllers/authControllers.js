@@ -50,8 +50,7 @@ async function login(req, res) {
             [email]
         )
         const user = rows[0]
-        if (!user) await hashPassword(senha)
-        const verification = await verifyPassword(senha, user?.senha)
+        const verification = await verifyPassword(senha, user?.senha || "__invalid_user__")
 
         if (!user || !verification.valid) {
             recordFailedLogin(clientIp)
